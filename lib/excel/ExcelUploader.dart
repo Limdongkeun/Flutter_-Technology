@@ -31,90 +31,82 @@ class ExcelUploader extends StatefulWidget {
 class _ExcelUploaderState extends State<ExcelUploader> {
 
   Future<void> _pickFile() async {
-    if(kIsWeb) {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result;
+    Uint8List? fileBytes;
+    String? fileName;
+    String? filePath;
+
+    if (kIsWeb) {
+      result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['xls', 'xlsx'],
       );
 
       if (result != null && result.files.isNotEmpty) {
-        Uint8List? fileBytes = result.files.first.bytes;
-        String fileName = result.files.first.name;
+        fileBytes = result.files.first.bytes;
+        fileName = result.files.first.name;
 
-        if (fileBytes != null) {
-          var excel = Excel.decodeBytes(fileBytes);
-          List<Map<String, dynamic>> productList = [];
-
-          for (var table in excel.tables.keys) {
-            var sheet = excel.tables[table];
-            print("File Name: $fileName");
-            print(excel.tables[table]!.maxColumns);
-            print(excel.tables[table]!.maxRows);
-
-            // 첫 번째 행은 헤더로 가정
-            List<String> headers = sheet!.rows.first.map((cell) =>
-            cell?.value.toString() ?? '').toList();
-
-            for (var i = 1; i < sheet.rows.length; i++) {
-              var row = sheet.rows[i];
-              Map<String, dynamic> product = {
-                'product_name': row[0]?.value,
-                'product_price': row[1]?.value,
-                'product_category': row[2]?.value,
-              };
-              productList.add(product);
-            }
-          }
-
-          print(productList);
-        }
       } else {
         print('파일 없음');
+        return;
+      }
+      if (fileBytes != null) {
+        _processExcelFile(fileBytes, fileName);
       }
     } else { // 앱인 경우
       var status = await Permission.storage.request();
 
       if (status.isGranted) {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
+        result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
           allowedExtensions: ['xls', 'xlsx'],
         );
 
         if (result != null && result.files.isNotEmpty) {
-          String? filePath = result.files.single.path;
+          filePath = result.files.single.path;
+          fileName = result.files.single.name;
 
           if (filePath != null) {
             var bytes = File(filePath).readAsBytesSync();
-            var excel = Excel.decodeBytes(bytes);
-            List<Map<String, dynamic>> productList = [];
-
-            for (var table in excel.tables.keys) {
-              var sheet = excel.tables[table];
-              print("File Name: ${result.files.single.name}");
-
-              // 첫 번째 행은 헤더로 가정
-              List<String> headers = sheet!.rows.first.map((cell) => cell?.value.toString() ?? '').toList();
-
-              for (var i = 1; i < sheet.rows.length; i++) {
-                var row = sheet.rows[i];
-                Map<String, dynamic> product = {
-                  'product_name': row[0]?.value,
-                  'product_price': row[1]?.value,
-                  'product_category': row[2]?.value,
-                };
-                productList.add(product);
-              }
-            }
-
-            print(productList);
+            _processExcelFile(bytes, fileName);
           }
         } else {
           print('파일 없음');
+          return;
         }
       } else {
-        print('Storage permission denied');
+        print('권한 거절');
+        return;
       }
     }
+  }
+
+  void _processExcelFile(Uint8List fileBytes, String fileName) {
+    var excel = Excel.decodeBytes(fileBytes);
+    List<Map<String, dynamic>> productList = [];
+
+    for (var table in excel.tables.keys) {
+      var sheet = excel.tables[table];
+      print("File Name: $fileName");
+      print(excel.tables[table]!.maxColumns);
+      print(excel.tables[table]!.maxRows);
+
+      // 첫 번째 행은 헤더로 가정
+      List<String> headers = sheet!.rows.first.map((cell) =>
+      cell?.value.toString() ?? '').toList();
+
+      for (var i = 1; i < sheet.rows.length; i++) {
+        var row = sheet.rows[i];
+        Map<String, dynamic> product = {
+          'product_name': row[0]?.value,
+          'product_price': row[1]?.value,
+          'product_category': row[2]?.value,
+        };
+        productList.add(product);
+      }
+    }
+
+    print(productList);
   }
 
   @override
