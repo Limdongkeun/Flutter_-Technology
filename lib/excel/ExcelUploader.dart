@@ -1,13 +1,11 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:excel/excel.dart';
 import 'dart:typed_data';
-import 'dart:convert';
-
 import 'package:permission_handler/permission_handler.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -55,8 +53,9 @@ class _ExcelUploaderState extends State<ExcelUploader> {
       }
     } else { // 앱인 경우
       var status = await Permission.storage.request();
-
+      print('권한 나옴');
       if (status.isGranted) {
+
         result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
           allowedExtensions: ['xls', 'xlsx'],
