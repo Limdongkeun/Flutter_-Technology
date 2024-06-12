@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:excel/excel.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -93,19 +94,58 @@ class _ExcelDownloaderState extends State<ExcelDownloader> {
 
     } else {
       // Save Excel file on mobile
-      var fileBytes = excel.save();
-      var directory = await getApplicationDocumentsDirectory();
-      String filePath = '${directory.path}/product.xlsx';
+      var permission = callPermission();
+      if (await permission) {
+        var fileBytes = excel.save();
+        Directory directory = Directory('/storage/emulated/0/Download');
+        String filePath = '${directory.path}/product.xlsx';
 
-      // File(('$directory/product.xlsx'))
-      //   ..createSync(recursive: true)
-      //   ..writeAsBytesSync(fileBytes!);
-      File file = File(filePath);
-      file.createSync(recursive: true);
-      await file.writeAsBytes(excel.encode()!);
-      print(filePath);
-      print('앱~~~성공');
+        // 디렉토리가 존재하지 않으면 생성합니다.
+        if (!directory.existsSync()) {
+          directory.createSync(recursive: true);
+        }
+
+        File file = File(filePath);
+        file.writeAsBytesSync(fileBytes!);
+        print(filePath);
+        print('앱~~~성공');
+      } else {
+        print('Permission denied');
+      }
     }
+  }
+
+  Future<bool> callPermission() async {
+    var status = await Permission.storage.request();
+    var permission = false;
+    if(status.isGranted) {
+      print('권한나옴');
+      permission = true;
+    } else {
+      print('권한 부여가 거부되었습니다.');
+      permission = false;
+    }
+
+    // if (status.isGranted) {
+    //   print('권한이 부여되었습니다.');
+    // }
+    //
+    // if(status.isDenied) {
+    //   print('권한 부여가 거부되었습니다.');
+    // }
+    //
+    // if(status.isPermanentlyDenied) {
+    //   print('권한 부여가 영구적으로 거부되었습니다.');
+    // }
+    //
+    // if(status.isRestricted) {
+    //   print('권한이 제한되었습니다.');
+    // }
+    //
+    // if(status.isUndetermined) {
+    //   print('권한 부여가 아직 미정입니다.');
+    // }
+    return permission;
   }
 
 
