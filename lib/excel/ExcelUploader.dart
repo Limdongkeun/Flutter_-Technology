@@ -53,9 +53,8 @@ class _ExcelUploaderState extends State<ExcelUploader> {
       }
     } else { // 앱인 경우
       var status = await Permission.storage.request();
-      print('권한 나옴');
       if (status.isGranted) {
-
+        print('권한 나옴');
         result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
           allowedExtensions: ['xls', 'xlsx'],
@@ -87,8 +86,8 @@ class _ExcelUploaderState extends State<ExcelUploader> {
     for (var table in excel.tables.keys) {
       var sheet = excel.tables[table];
       print("File Name: $fileName");
-      print(excel.tables[table]!.maxColumns);
-      print(excel.tables[table]!.maxRows);
+      print("File Column: ${excel.tables[table]!.maxColumns}");
+      print("File Row: ${excel.tables[table]!.maxRows}");
 
       // 첫 번째 행은 헤더로 가정
       List<String> headers = sheet!.rows.first.map((cell) =>
@@ -100,9 +99,21 @@ class _ExcelUploaderState extends State<ExcelUploader> {
           'product_name': row[0]?.value,
           'product_price': row[1]?.value,
           'product_category': row[2]?.value,
+          'product_필수1': row[3]?.value,
+          'product_필수2': row[4]?.value,
+          'product_필수3': row[5]?.value,
+          'product_필수4': row[6]?.value,
+          'product_필수5': row[7]?.value,
+          'product_필수6': row[8]?.value,
+          'product_필수7': row[9]?.value,
+          'product_필수8': row[10]?.value,
+          'product_필수9': row[11]?.value,
+          'product_필수10': row[12]?.value,
         };
         productList.add(product);
       }
+
+      print(headers.toString());
     }
 
     print(productList);
