@@ -24,6 +24,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>com.apple.developer.siri</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -45,62 +47,65 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<!-- Permission options for the `location` group -->
+
+    <!-- Permission options for the `location` group -->
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Need location when in use</string>
+    <string>We need your location to provide better service.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Always and when in use!</string>
+    <string>We need your location to provide better service at all times.</string>
     <key>NSLocationUsageDescription</key>
-    <string>Older devices need location.</string>
+    <string>We need your location to provide better service.</string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Can I have location always?</string>
+    <string>We need your location to provide better service even when the app is not in use.</string>
 
     <!-- Permission options for the `mediaLibrary` group -->
     <key>NSAppleMusicUsageDescription</key>
-    <string>Music!</string>
+    <string>We need access to your media library to play music.</string>
     <key>kTCCServiceMediaLibrary</key>
-    <string>media</string>
+    <string>We need access to your media library.</string>
 
     <!-- Permission options for the `calendar` group -->
     <key>NSCalendarsUsageDescription</key>
-    <string>Calendars</string>
+    <string>We need access to your calendar to manage events.</string>
 
     <!-- Permission options for the `camera` group -->
     <key>NSCameraUsageDescription</key>
-    <string>camera</string>
+    <string>We need access to your camera to take photos and videos.</string>
 
     <!-- Permission options for the `contacts` group -->
     <key>NSContactsUsageDescription</key>
-    <string>contacts</string>
+    <string>We need access to your contacts to provide better service.</string>
 
     <!-- Permission options for the `microphone` group -->
     <key>NSMicrophoneUsageDescription</key>
-    <string>microphone</string>
+    <string>We need access to your microphone for audio features.</string>
 
     <!-- Permission options for the `speech` group -->
     <key>NSSpeechRecognitionUsageDescription</key>
-    <string>speech</string>
+    <string>We need access to speech recognition for voice features.</string>
 
     <!-- Permission options for the `sensors` group -->
     <key>NSMotionUsageDescription</key>
-    <string>motion</string>
+    <string>We need access to your motion sensors for better tracking.</string>
 
     <!-- Permission options for the `photos` group -->
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>photos</string>
+    <string>We need access to your photo library to save and view photos.</string>
 
     <!-- Permission options for the `reminder` group -->
     <key>NSRemindersUsageDescription</key>
-    <string>reminders</string>
+    <string>We need access to your reminders to create and manage reminders.</string>
 
     <!-- Permission options for the `bluetooth` -->
     <key>NSBluetoothAlwaysUsageDescription</key>
-    <string>bluetooth</string>
+    <string>We need access to Bluetooth to connect to external devices.</string>
     <key>NSBluetoothPeripheralUsageDescription</key>
-    <string>bluetooth</string>
+    <string>We need access to Bluetooth peripherals.</string>
 
     <!-- Permission options for the `appTrackingTransparency` -->
     <key>NSUserTrackingUsageDescription</key>
-    <string>appTrackingTransparency</string>
+    <string>We need access to your tracking data to provide better ads.</string>
+    <key>NSDocumentsUsageDescription</key>
+    <string>We need access to save files to the Files app.</string>
 </dict>
 </plist>

@@ -37,8 +37,8 @@ class ExcelUploader {
         }
       }
     } else { // 앱인 경우
-      var status = Permission.manageExternalStorage.request();
-      if (await status.isGranted) {
+      var permission = await _callPermission();
+      if (permission) {
         debugPrint('권한 나옴');
         result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
@@ -69,6 +69,40 @@ class ExcelUploader {
     }
 
     return [];
+  }
+
+  static Future<bool> _callPermission() async {
+    bool permission = false;
+
+    if (Platform.isAndroid) {
+      permission = await _requestAndroidPermissions();
+    } else if (Platform.isIOS) {
+      permission = await _requestIOSPermissions();
+    }
+
+    return permission;
+  }
+
+  static Future<bool> _requestAndroidPermissions() async {
+    var status = await Permission.manageExternalStorage.request();
+    if (status.isGranted) {
+      debugPrint('권한 부여됨 (Android)');
+      return true;
+    } else {
+      debugPrint('권한 부여가 거부되었습니다 (Android).');
+      return false;
+    }
+  }
+
+  static Future<bool> _requestIOSPermissions() async {
+    var status = await Permission.mediaLibrary.request();
+    if (status.isGranted) {
+      debugPrint('권한 부여됨 (iOS)');
+      return true;
+    } else {
+      debugPrint('권한 부여가 거부되었습니다 (iOS).');
+      return false;
+    }
   }
 
   static List<Map<String, dynamic>> processExcelFile(Uint8List fileBytes, String fileName) {
