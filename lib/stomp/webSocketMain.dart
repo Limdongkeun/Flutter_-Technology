@@ -91,75 +91,75 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container(
-          child: Column(
-            children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 위젯끼리 같은 공간만큼 띄움
-                children: <Widget>[
-                  ElevatedButton( //ElevatedButton-기존의 RaisedButton,버튼을 강조하고 싶을 때 사용
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red
-                    ), // 버튼 색은 빨강색으로
-                    onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
-                      _sendKeyValue();
-                    },
-                    child: const Text(
-                      "sendKeyValue",
-                      style: TextStyle(color: Colors.black),
-                    ),
+        child: Column(
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 위젯끼리 같은 공간만큼 띄움
+              children: <Widget>[
+                ElevatedButton( //ElevatedButton-기존의 RaisedButton,버튼을 강조하고 싶을 때 사용
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red
+                  ), // 버튼 색은 빨강색으로
+                  onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
+                    _sendKeyValue();
+                  },
+                  child: const Text(
+                    "sendKeyValue",
+                    style: TextStyle(color: Colors.black),
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue
-                    ), // 버튼 색은 파란색으로
-                    onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
-                      _programRestart();
-                    },
-                    child: const Text(
-                      "programRestart",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue
+                  ), // 버튼 색은 파란색으로
+                  onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
+                    _programRestart();
+                  },
+                  child: const Text(
+                    "programRestart",
+                    style: TextStyle(color: Colors.black),
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green
-                    ), // 버튼 색은 파란색으로
-                    onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
-                      _programStop();
-                    },
-                    child: const Text(
-                      "programStop",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green
+                  ), // 버튼 색은 파란색으로
+                  onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
+                    _programStop();
+                  },
+                  child: const Text(
+                    "programStop",
+                    style: TextStyle(color: Colors.black),
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow
-                    ), // 버튼 색은 파란색으로
-                    onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
-                      _systemShutDown();
-                    },
-                    child: const Text(
-                      "systemShutdown",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow
+                  ), // 버튼 색은 파란색으로
+                  onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
+                    _systemShutDown();
+                  },
+                  child: const Text(
+                    "systemShutdown",
+                    style: TextStyle(color: Colors.black),
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey
-                    ), // 버튼 색은 파란색으로
-                    onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
-                      _cancelPayment();
-                    },
-                    child: const Text(
-                      "cancelPayment",
-                      style: TextStyle(color: Colors.black),
-                    ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey
+                  ), // 버튼 색은 파란색으로
+                  onPressed: () { // 버튼을 누르면 안에 있는 함수를 실행
+                    _cancelPayment();
+                  },
+                  child: const Text(
+                    "cancelPayment",
+                    style: TextStyle(color: Colors.black),
                   ),
-                ],
-              )
-            ],
-          )
+                ),
+              ],
+            )
+          ],
+        )
 
       ),
 

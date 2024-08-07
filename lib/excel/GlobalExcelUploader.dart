@@ -6,33 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:excel/excel.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+class ExcelUploader {
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: ExcelUploader(),
-    );
-  }
-}
-
-
-class ExcelUploader extends StatefulWidget {
-  const ExcelUploader({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _ExcelUploaderState();
-
-}
-
-class _ExcelUploaderState extends State<ExcelUploader> {
-
-  Future<void> _pickFile() async {
+  static Future<List<Map<String, dynamic>>> pickFile() async {
     FilePickerResult? result;
     Uint8List? fileBytes;
     String? fileName;
@@ -50,13 +26,18 @@ class _ExcelUploaderState extends State<ExcelUploader> {
 
       } else {
         debugPrint('파일 없음');
-        return;
+        return [];
       }
       if (fileBytes != null) {
-        _processExcelFile(fileBytes, fileName);
+        try {
+          return processExcelFile(fileBytes, fileName);
+        } catch (e) {
+          debugPrint('Error processing file: $e');
+          return [];
+        }
       }
     } else { // 앱인 경우
-      var status =  Permission.manageExternalStorage.request();
+      var status = Permission.manageExternalStorage.request();
       if (await status.isGranted) {
         debugPrint('권한 나옴');
         result = await FilePicker.platform.pickFiles(
@@ -70,20 +51,27 @@ class _ExcelUploaderState extends State<ExcelUploader> {
 
           if (filePath != null) {
             var bytes = File(filePath).readAsBytesSync();
-            _processExcelFile(bytes, fileName);
+            try {
+              return processExcelFile(bytes, fileName);
+            } catch (e) {
+              debugPrint('Error processing file: $e');
+              return [];
+            }
           }
         } else {
           debugPrint('파일 없음');
-          return;
+          return [];
         }
       } else {
         debugPrint('권한 거절');
-        return;
+        return [];
       }
     }
+
+    return [];
   }
 
-  void _processExcelFile(Uint8List fileBytes, String fileName) {
+  static List<Map<String, dynamic>> processExcelFile(Uint8List fileBytes, String fileName) {
     var excel = Excel.decodeBytes(fileBytes);
     List<Map<String, dynamic>> excelDataList = [];
 
@@ -96,35 +84,27 @@ class _ExcelUploaderState extends State<ExcelUploader> {
       // 첫 번째 행은 헤더로 가정
       List<String> headers = sheet!.rows.first.map((cell) => cell?.value.toString() ?? '').toList();
 
+      // Check for empty header values
+      for (int i = 0; i < headers.length; i++) {
+        if (headers[i].isEmpty) {
+          throw Exception("Header at index $i is empty.");
+        }
+      }
+
       for (var i = 1; i < sheet.rows.length; i++) {
         var row = sheet.rows[i];
-        Map<String, dynamic> excel = {};
+        Map<String, dynamic> excelRow = {};
 
-        //헤더 n번 째와 row n번째 값을 넣는다
+        // 헤더 n번 째와 row n번째 값을 넣는다
         for (var j = 0; j < headers.length; j++) {
-          excel[headers[j]] = row[j]?.value;
+          excelRow[headers[j]] = row[j]?.value;
         }
 
-        excelDataList.add(excel);
+        excelDataList.add(excelRow);
       }
       debugPrint(headers.toString());
     }
 
-    debugPrint(excelDataList.toString());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Excel 파일 업로드'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _pickFile,
-          child: const Text('파일 선택'),
-        ),
-      ),
-    );
+    return excelDataList;
   }
 }
