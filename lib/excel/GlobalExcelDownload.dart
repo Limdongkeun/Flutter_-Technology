@@ -48,7 +48,9 @@ class ExcelDownloader {
         // Save the file
         File file = File(filePath);
         file.writeAsBytesSync(fileBytes!);
-        Share.shareFiles([filePath]);
+        if(Platform.isIOS) {
+          Share.shareFiles([filePath]);
+        }
         debugPrint('File saved at $filePath');
         debugPrint('앱~~~성공');
       } else {
